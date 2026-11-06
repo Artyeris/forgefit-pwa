@@ -1,0 +1,5 @@
+node_modules/
+tests/ui-harness.js
+docs/ui-test-failure.png
+*.log
+.DS_Store

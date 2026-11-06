@@ -1,0 +1,4 @@
+ForgeFit 0.1.0
+Offline shell revision: 2200ba480abbc214
+Precached files: 15
+Runtime dependencies: none

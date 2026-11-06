@@ -1,0 +1,11 @@
+/** Test-only harness. It is NOT copied into dist or used by the shipped application.
+ * Renders the same app/controllers under about:blank with an explicit memory storage adapter.
+ * Use browser-real.py for native IndexedDB and service-worker integration testing.
+ */
+import fs from 'node:fs/promises';import path from 'node:path';import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);let ts;try{ts=require('typescript')}catch{ts=require('/opt/nvm/versions/node/v22.16.0/lib/node_modules/typescript')}
+const root=path.resolve(import.meta.dirname,'..'),files=(await fs.readdir(path.join(root,'src'))).filter(x=>x.endsWith('.ts'));
+let output=`(()=>{if(!crypto.randomUUID)crypto.randomUUID=()=>Array.from(crypto.getRandomValues(new Uint8Array(16)),v=>v.toString(16).padStart(2,'0')).join('');const factories={},cache={};function require(id){if(cache[id])return cache[id].exports;const module={exports:{}};cache[id]=module;factories[id](require,module,module.exports);return module.exports;}\n`;
+for(const f of files){if(f==='storage.ts')continue;const source=(await fs.readFile(path.join(root,'src',f),'utf8')).replaceAll('import.meta.url','"https://forgefit.test/assets/app.js"');const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;output+=`factories['./${f.replace('.ts','.js')}']=function(require,module,exports){\n${js}\n};\n`}
+output+=`factories['./storage.js']=function(require,module,exports){const {fresh}=require('./seeds.js');const {clone,uid,validateState,backup}=require('./model.js');const store={state:fresh(),revision:0,error:'',recovered:false,conflict:false,recoveryJournal:null,onStatus:null,onExternal:null,saving:false,previous:null,async init(){},change(fn){const next=clone(this.state);fn(next);next.changeId=uid();next.updatedAt=Date.now();this.state=next;this.revision++;this.onStatus?.()},async flush(){},async replace(data){this.previous=backup(this.state);this.state=validateState(data);this.revision++},async beforeImport(){return this.previous}};exports.store=store;};globalThis.__test={require};require('./app.js');})();`;
+await fs.writeFile(path.join(root,'tests/ui-harness.js'),output);console.log('Generated test-only memory-adapter UI harness.');
