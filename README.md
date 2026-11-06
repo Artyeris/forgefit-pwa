@@ -1,5 +1,7 @@
 # ForgeFit 0.1.0
 
+**GitHub publishing update (November 2026):** The full 0.1.0 source and production assets have been committed. The dedicated `gh-pages` branch is ready for free GitHub Pages hosting; it must be enabled in [repository Pages settings](https://github.com/Artyeris/forgefit-pwa/settings/pages). Follow [the GitHub Pages iPhone install guide](docs/PUBLISH-IPHONE-VIA-GITHUB-PAGES.md). The app itself has **not been verified live or physically tested on an iPhone**. The repository is currently public.
+
 An independent, iPhone-focused workout tracker with familiar dashboard, routine, and focused set-logging flows. The working name is **ForgeFit**. It is not affiliated with MacroFactor and does not contain its branding, assets, source code, or coaching algorithms.
 
 **Delivery status:** built and packaged for initial testing; not deployed to a public URL. This is a first test release, not a fully validated daily-use release.
